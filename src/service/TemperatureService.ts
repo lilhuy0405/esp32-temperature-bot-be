@@ -28,7 +28,7 @@ class TemperatureService {
   async getTemperature(limit = 100) {
     return await this._temperatureRepository.find({
       order: {
-        createdAt: "DESC",
+        createdAt: "ASC",
       },
       take: limit,
     });
