@@ -52,7 +52,9 @@ async function main() {
     temperatureEntity.humidity = humidity;
     temperatureEntity.heatIndex = heatIndex;
     temperatureEntity.createdAt = createdAt;
-    await temperatureService.create(temperatureEntity);
+    const created = await temperatureService.create(temperatureEntity);
+    const webTopic = 'esp32/temperature-bot/web';
+    await client.publishAsync(webTopic, JSON.stringify(created));
     console.log(`Saved data: ${dataString}`);
   })
 
