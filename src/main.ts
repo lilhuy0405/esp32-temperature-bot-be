@@ -36,6 +36,7 @@ async function main() {
 
 
   client.on('message', async (receivedTopic, message) => {
+    console.log(`Received message from topic ${receivedTopic}`, message.toString());
     if (receivedTopic !== topic) {
       return;
     }
@@ -53,7 +54,7 @@ async function main() {
     temperatureEntity.heatIndex = heatIndex;
     temperatureEntity.createdAt = createdAt;
     const created = await temperatureService.create(temperatureEntity);
-    const webTopic = 'esp32/temperature-bot/web';
+    const webTopic = 'esp32/temperature-bot-web';
     await client.publishAsync(webTopic, JSON.stringify(created));
     console.log(`Saved data: ${dataString}`);
   })
@@ -71,7 +72,7 @@ async function main() {
     try {
       const temperatures = await temperatureService.getTemperature(+limit);
       return res.status(200).json({
-        data: temperatures
+        data: temperatures.reverse(),
       });
     } catch (err: any) {
       return res.status(500).json({message: err.message});
